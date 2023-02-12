@@ -18,6 +18,20 @@ argument = parser.parse_args()
 
 # DEFINE FUNCTIONS 
 
+def banner():
+    print('''
+*********************************************************************
+*                                                                   *
+*                         HunterThreat                              *
+*                                                                   *
+*                Developed by: Christian Vergara                    * 
+*                                                                   *
+*             https://christianymoon.github.io/christianvr/         *
+*                                                                   *
+*********************************************************************
+''')
+
+
 def print_analysis_results(analysis):
     """
     Prints the data from the parsed file
@@ -105,6 +119,7 @@ if not argument.apikey:
     print("\nError: No such apikey, please insert you'r apikey or get a api in https://www.virustotal.com\n\n")
 
 if argument.scan and argument.file and argument.apikey:
+    banner()
     if os.path.exists(argument.file) and os.path.isfile(argument.file):
         #return analysis JSON
         data = request_analysis_results(argument.file, argument.apikey)
