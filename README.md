@@ -22,4 +22,9 @@ with `--apikey`we tell our apikey
 
 > Some examples for the use to script
 
+*Windows:* 
+
     python HunterThreat.py --scan --file ./file.exe --apikey <apikey>
+*Linux:*
+
+    python3 ./HunterThreat --scan --file.deb --apikey <apikey>
