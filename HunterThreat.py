@@ -119,7 +119,9 @@ if not argument.apikey:
     print("\nError: No such apikey, please insert you'r apikey or get a api in https://www.virustotal.com\n\n")
 
 if argument.scan and argument.file and argument.apikey:
-    banner()
+    if argument.verbose:
+        banner()
+
     if os.path.exists(argument.file) and os.path.isfile(argument.file):
         #return analysis JSON
         data = request_analysis_results(argument.file, argument.apikey)
@@ -130,3 +132,4 @@ if argument.scan and argument.file and argument.apikey:
     
     else:
         print("no such file exists or file no valid id")
+
