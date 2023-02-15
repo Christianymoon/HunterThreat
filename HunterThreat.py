@@ -4,6 +4,7 @@ import requests
 import datetime
 import time
 import json
+import sys
 import os
 
 init(autoreset=True)
@@ -86,7 +87,7 @@ def request_analysis_results(filename, apikey):
     files = {"file": (filename, open(filename, "rb"))}
     response = requests.post(url, files=files, headers=headers)
     json_data = json.loads(response.text)
-    return json_data
+    return dict(json_data)
 
 
 def analysis_file(identificator, apikey):
@@ -105,11 +106,16 @@ def analysis_file(identificator, apikey):
     response = requests.get(url + identificator, headers=headers)
     json_analysis = json.loads(response.text)
     jsondict = dict(json_analysis)
-    if jsondict["data"]["attributes"]["status"] == "completed":
-        return jsondict
-    else:
-        analysis_file(identificator, apikey)
-        time.sleep(1)
+    try:
+        if jsondict["data"]["attributes"]["status"] == "completed":
+            return jsondict
+        else:
+            time.sleep(1)
+            analysis_file(identificator, apikey)
+    except:
+        if jsondict['error']['code'] == "QuotaExceededError":
+            print(jsondict['error']['message'])
+            sys.exit(0)
     
 # ARGS PARSING PRINCIPAL SCRIPT 
 
@@ -127,7 +133,8 @@ if argument.scan and argument.file and argument.apikey:
         #return analysis JSON
         data = request_analysis_results(argument.file, argument.apikey)
         #return JSON analysis from identificator
-        analysis = analysis_file(data["data"]["id"], argument.apikey)
+        identification = data['data']['id']
+        analysis = analysis_file(identification, argument.apikey)
         # results = get_analysis_by_complete_status(analysis)
         print_analysis_results(analysis)
     
