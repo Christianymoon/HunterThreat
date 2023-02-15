@@ -104,8 +104,9 @@ def analysis_file(identificator, apikey):
         "X-Apikey": apikey}
     response = requests.get(url + identificator, headers=headers)
     json_analysis = json.loads(response.text)
-    if json_analysis["data"]["attributes"]["status"] == "completed":
-        return json_analysis
+    jsondict = dict(json_analysis)
+    if jsondict["data"]["attributes"]["status"] == "completed":
+        return jsondict
     else:
         analysis_file(identificator, apikey)
         time.sleep(1)
